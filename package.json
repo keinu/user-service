@@ -1,0 +1,17 @@
+{
+  "name": "user-service",
+  "version": "1.0.0",
+  "description": "A complete user service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^5.4.1",
+    "q": "^1.4.1",
+    "scrypt": "^5.4.1",
+    "node-simple-dynamo": "git+https://github.com/keinu/node-simple-dynamo.git"
+  }
+}
