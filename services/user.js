@@ -7,11 +7,11 @@ var database = SimpleDynamo({}, {
     // endpoint: "http://localhost:8088"
 });
 
-if (!process.env.SALT) {
-    throw new Error("Authentication salt is not defined");
-}
-
 exports.createUser = function(user) {
+
+    if (!process.env.SALT) {
+        throw new Error("Authentication salt is not defined");
+    }
 
     return scrypt.hash(user.password, {
         "N": 16,
@@ -37,6 +37,10 @@ exports.getUsers = function(email) {
 };
 
 exports.getUserByEmailAndPassword = function(email, password) {
+
+    if (!process.env.SALT) {
+        throw new Error("Authentication salt is not defined");
+    }
 
     // Cannot use as promise, lack of fail handler
     var result = scrypt.hashSync(password, {
