@@ -6,6 +6,7 @@ module.exports = (function() {
 
 	var authenticate = function(token) {
 
+		token = token.split(" ")[1] || token;
 		return authenticationService.verify(token).then(function(token) {
 			return token.id;
 		});
