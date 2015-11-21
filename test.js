@@ -1,16 +1,30 @@
-var user = require("./index");
+var UserService = require("./index");
+	userService = new UserService({
+		expires: 10,
+		authenticationKey: "TEST"
+	});
 
-user.authenticationService.getToken("xabi@keinu.net", "qwer").then(function(token) {
+var t;
+userService.authenticationService.getToken("test@test.test", "test").then(function(token) {
 
+	t = token;
 	token = "Bearer " + token;
-	return user.authenticate(token);
+
+	return userService.authenticate(token);
 
 }).then(function(user) {
 
 	console.log("UserID: ", user);
 
+	return userService.authenticationService.verify(t);
+
+}).then(function() {
+
+	console.log(arguments);
+
 }).fail(function(err){
 
-	console.log(err);
+	console.error(err);
+	console.trace(err.stack);
 
 });

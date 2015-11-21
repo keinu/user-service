@@ -1,8 +1,13 @@
-var authenticationService = require("./services/authentication");
-	//registrationService = require("./services/registration");
-var userService = require("./services/user");
+var userService = require("./services/user"),
+	registrationService = require("./services/registration");
 
-module.exports = (function() {
+module.exports = function(options) {
+
+	var AuthenticationService = require("./services/authentication"),
+		authenticationService = new AuthenticationService({
+			expires: options.expires,
+			authenticationKey: options.authenticationKey
+		});
 
 	var authenticate = function(token) {
 
@@ -16,7 +21,8 @@ module.exports = (function() {
 	return {
 		userService: userService,
 		authenticationService: authenticationService,
+		registrationService: registrationService,
 		authenticate: authenticate
 	};
 
-})();
+};

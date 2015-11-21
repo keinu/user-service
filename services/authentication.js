@@ -1,11 +1,22 @@
 var jwt = require('jsonwebtoken'),
-	Q = require("q");
+	Promise = require("bluebird");
+
+var jwtVerifyAsync = Promise.promisify(jwt.verify, jwt);
 
 var userService = require("./user");
-var expires = 120; //minutes
-var privateKey = process.env.AUTHENTICATION_KEY;
 
-module.exports = (function() {
+module.exports = function(options) {
+
+	if (!options) {
+		options = {};
+	}
+
+	options.expires = options.expires ? options.expires : 15; // 15 minutes
+	options.authenticationKey = options.authenticationKey ? options.authenticationKey : process.env.AUTHENTICATION_KEY;
+
+	if (!options.authenticationKey) {
+		throw new Error("Authentication key missing");
+	}
 
 	var getExpiration = function(minutes) {
 
@@ -18,25 +29,13 @@ module.exports = (function() {
 
 	var verify = function(token) {
 
-		var deferred = Q.defer();
-		jwt.verify(token, privateKey, function(err, data) {
-
-			if (err) {
-				console.log(err, err.stack);
-				deferred.reject(err);
-			}
-
-			deferred.resolve(data);
-
-		});
-
-		return deferred.promise;
+		return jwtVerifyAsync(token, options.authenticationKey);
 
 	};
 
 	var sign = function(data) {
 
-		return jwt.sign(data, privateKey);
+		return jwt.sign(data, options.authenticationKey);
 
 	};
 
@@ -52,7 +51,7 @@ module.exports = (function() {
 
 			// Generate and sign a token, with a user id and expiration date
 			var newToken = sign({
-				exp: getExpiration(expires), // Expires in 60 minutes
+				exp: getExpiration(options.expires),
 				id: user.id
 			});
 
@@ -73,7 +72,7 @@ module.exports = (function() {
 		}).then(function(user) {
 
 			var newToken = sign({
-				exp: getExpiration(expires), // Expires in 60 minutes
+				exp: getExpiration(options.expires),
 				id: user.id
 			});
 
@@ -101,4 +100,4 @@ module.exports = (function() {
 		verify: verify
 	};
 
-})();
+};
