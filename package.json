@@ -12,6 +12,7 @@
     "bluebird": "^3.0.5",
     "jsonwebtoken": "^5.4.1",
     "node-simple-dynamo": "git+https://github.com/keinu/node-simple-dynamo.git",
+    "email-service": "git+https://git-codecommit.us-east-1.amazonaws.com/v1/repos/email-service",
     "scrypt": "^5.4.1"
   },
   "devDependencies": {

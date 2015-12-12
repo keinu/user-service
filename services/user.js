@@ -87,7 +87,6 @@ exports.getUserByEmail = function(email) {
 
 };
 
-
 exports.getUser = function(id) {
 
     return database.get("is-users", id);
